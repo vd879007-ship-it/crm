@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   Scale, 
@@ -123,7 +123,7 @@ export default function LabourLawReports() {
 
   const fetchReports = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/labour-law-reports`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hr/labour-law-reports`);
       setReports(res.data || []);
     } catch (err) {
       console.error('Failed to fetch statutory reports:', err);
@@ -139,7 +139,7 @@ export default function LabourLawReports() {
   const handleGenerateReport = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/labour-law-reports/generate`, formData);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/labour-law-reports/generate`, formData);
       setShowGenerateModal(false);
       setFormData({
         actType: "Employees' Provident Fund (EPFO / ECR)",
@@ -162,7 +162,7 @@ export default function LabourLawReports() {
         state: 'Pan-India / All Locations',
         comments: 'Automated statutory reconciliation generated for monthly compliance auditing.'
       };
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/labour-law-reports/generate`, sample);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/labour-law-reports/generate`, sample);
       fetchReports();
     } catch (err) {
       console.error('Simulation failed:', err);
@@ -187,7 +187,7 @@ export default function LabourLawReports() {
     e.preventDefault();
     if (!editingReport) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/labour-law-reports/${editingReport.id}`, {
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hr/labour-law-reports/${editingReport.id}`, {
         ...editForm,
         recordsAudited: Number(editForm.recordsAudited)
       });
@@ -203,7 +203,7 @@ export default function LabourLawReports() {
   const handleDeleteReport = async (id: string) => {
     if (!window.confirm('Are you sure you want to permanently delete this statutory report?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/labour-law-reports/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hr/labour-law-reports/${id}`);
       fetchReports();
     } catch (err) {
       console.error(err);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   Pencil,
@@ -75,7 +75,7 @@ export default function AlertsReminders() {
 
   const fetchAlerts = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/alerts`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/alerts`);
       setAlerts(res.data || []);
     } catch (err) {
       console.error('Failed to fetch alerts:', err);
@@ -97,7 +97,7 @@ export default function AlertsReminders() {
     e.preventDefault();
     if (!editingAlert) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/alerts/${editingAlert.id}`, editingAlert);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/alerts/${editingAlert.id}`, editingAlert);
       setShowEditModal(false);
       setEditingAlert(null);
       fetchAlerts();
@@ -110,7 +110,7 @@ export default function AlertsReminders() {
   const handleCreateAlert = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/alerts`, newAlert);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/alerts`, newAlert);
       setShowCreateModal(false);
       setNewAlert({
         title: '',
@@ -132,7 +132,7 @@ export default function AlertsReminders() {
   const handleBroadcast = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/alerts/broadcast`, broadcast);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/alerts/broadcast`, broadcast);
       setShowBroadcastModal(false);
       setBroadcast({
         title: '',
@@ -148,7 +148,7 @@ export default function AlertsReminders() {
 
   const updateAlertStatus = async (id: string, status: string) => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/alerts/${id}/status`, { status });
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/alerts/${id}/status`, { status });
       fetchAlerts();
     } catch (err) {
       console.error(err);
@@ -157,7 +157,7 @@ export default function AlertsReminders() {
 
   const deleteAlert = async (id: string) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/alerts/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hem/alerts/${id}`);
       fetchAlerts();
     } catch (err) {
       console.error(err);
@@ -213,7 +213,7 @@ export default function AlertsReminders() {
     ];
 
     for (const item of samples) {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/alerts`, item);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/alerts`, item);
     }
     fetchAlerts();
   };

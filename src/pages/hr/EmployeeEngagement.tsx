@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   Pencil,
@@ -82,8 +82,8 @@ export default function EmployeeEngagement() {
   const fetchEngagementData = async () => {
     try {
       const [surveysRes, kudosRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/engagement/surveys`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/engagement/kudos`)
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hr/engagement/surveys`),
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hr/engagement/kudos`)
       ]);
       setSurveys(surveysRes.data || []);
       setKudos(kudosRes.data || []);
@@ -107,7 +107,7 @@ export default function EmployeeEngagement() {
     e.preventDefault();
     if (!editingKudos) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/engagement/kudos/${editingKudos.id}`, editingKudos);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hr/engagement/kudos/${editingKudos.id}`, editingKudos);
       setShowEditKudosModal(false);
       setEditingKudos(null);
       fetchEngagementData();
@@ -120,7 +120,7 @@ export default function EmployeeEngagement() {
   const handleDeleteKudos = async (id: string) => {
     if (!window.confirm('Delete this kudos recognition from the wall?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/engagement/kudos/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hr/engagement/kudos/${id}`);
       fetchEngagementData();
     } catch (err) {
       console.error(err);
@@ -137,7 +137,7 @@ export default function EmployeeEngagement() {
     e.preventDefault();
     if (!editingSurvey) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/engagement/surveys/${editingSurvey.id}`, editingSurvey);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hr/engagement/surveys/${editingSurvey.id}`, editingSurvey);
       setShowEditSurveyModal(false);
       setEditingSurvey(null);
       fetchEngagementData();
@@ -150,7 +150,7 @@ export default function EmployeeEngagement() {
   const handleDeleteSurvey = async (id: string) => {
     if (!window.confirm('Delete this pulse survey?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/engagement/surveys/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hr/engagement/surveys/${id}`);
       fetchEngagementData();
     } catch (err) {
       console.error(err);
@@ -161,7 +161,7 @@ export default function EmployeeEngagement() {
   const handleSendKudos = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/engagement/kudos`, newKudos);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/engagement/kudos`, newKudos);
       setShowKudosModal(false);
       setNewKudos({
         senderName: '',
@@ -179,7 +179,7 @@ export default function EmployeeEngagement() {
   const handleCreateSurvey = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/engagement/surveys`, newSurvey);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/engagement/surveys`, newSurvey);
       setShowSurveyModal(false);
       setNewSurvey({
         title: '',
@@ -197,7 +197,7 @@ export default function EmployeeEngagement() {
     e.preventDefault();
     if (!activeSurveyToTake) return;
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/engagement/surveys/${activeSurveyToTake.id}/respond`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/engagement/surveys/${activeSurveyToTake.id}/respond`, {
         rating: surveyResponseRating,
         feedback: surveyResponseFeedback
       });
@@ -235,9 +235,9 @@ export default function EmployeeEngagement() {
     };
 
     for (const k of sampleKudos) {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/engagement/kudos`, k);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/engagement/kudos`, k);
     }
-    await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/engagement/surveys`, sampleSurvey);
+    await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/engagement/surveys`, sampleSurvey);
 
     fetchEngagementData();
   };

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   Pencil,
@@ -94,8 +94,8 @@ export default function OvertimeManagement() {
   const fetchOvertimeData = async () => {
     try {
       const [polRes, clmRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/overtime/policy`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/overtime/claims`)
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/overtime/policy`),
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/overtime/claims`)
       ]);
       setPolicy(polRes.data || policy);
       setPolicyForm(polRes.data || policy);
@@ -120,7 +120,7 @@ export default function OvertimeManagement() {
     e.preventDefault();
     if (!editingClaim) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/overtime/claims/${editingClaim.id}`, editingClaim);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/overtime/claims/${editingClaim.id}`, editingClaim);
       setShowEditClaimModal(false);
       setEditingClaim(null);
       fetchOvertimeData();
@@ -133,7 +133,7 @@ export default function OvertimeManagement() {
   const handleDeleteClaim = async (id: string) => {
     if (!window.confirm('Delete this overtime claim entry?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/overtime/claims/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hem/overtime/claims/${id}`);
       fetchOvertimeData();
     } catch (err) {
       console.error(err);
@@ -144,7 +144,7 @@ export default function OvertimeManagement() {
   const handleSubmitClaim = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/overtime/claims`, claimForm);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/overtime/claims`, claimForm);
       setShowClaimModal(false);
       setClaimForm({
         employeeName: '',
@@ -173,7 +173,7 @@ export default function OvertimeManagement() {
         { name: 'Rohan Deshmukh', id: 'EMP-3041', dept: 'Quality Assurance' }
       ];
       const person = sampleNames[Math.floor(Math.random() * sampleNames.length)];
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/overtime/claims`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/overtime/claims`, {
         employeeName: person.name,
         employeeId: person.id,
         department: person.dept,
@@ -194,7 +194,7 @@ export default function OvertimeManagement() {
   const handleUpdatePolicy = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/overtime/policy`, policyForm);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/overtime/policy`, policyForm);
       setShowPolicyModal(false);
       fetchOvertimeData();
       alert('Overtime policy settings updated.');
@@ -206,7 +206,7 @@ export default function OvertimeManagement() {
 
   const handleReviewClaim = async (id: string, newStatus: 'Approved' | 'Rejected') => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/overtime/claims/${id}/status`, {
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/overtime/claims/${id}/status`, {
         status: newStatus,
         reviewedBy: 'Project Delivery Head',
         notes: newStatus === 'Approved' ? 'Verified against punch logs' : 'Unscheduled overtime exceeding budget'

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   CalendarCheck, 
@@ -99,7 +99,7 @@ export default function LeaveManagement() {
     e.preventDefault();
     if (!editingRequest) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/leaves/requests/${editingRequest.id}`, editRequestForm);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/leaves/requests/${editingRequest.id}`, editRequestForm);
       setShowEditRequestModal(false);
       fetchLeaveData();
     } catch (err) {
@@ -110,7 +110,7 @@ export default function LeaveManagement() {
   const handleDeleteRequest = async (id: string) => {
     if (!confirm('Are you sure you want to delete this leave request?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/leaves/requests/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hem/leaves/requests/${id}`);
       fetchLeaveData();
     } catch (err) {
       alert('Failed to delete leave request');
@@ -133,7 +133,7 @@ export default function LeaveManagement() {
     e.preventDefault();
     if (!editingType) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/leaves/types/${editingType.id}`, editTypeForm);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/leaves/types/${editingType.id}`, editTypeForm);
       setShowEditTypeModal(false);
       fetchLeaveData();
     } catch (err) {
@@ -144,7 +144,7 @@ export default function LeaveManagement() {
   const handleDeleteType = async (id: string, name: string) => {
     if (!confirm(`Are you sure you want to delete the "${name}" leave scheme?`)) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/leaves/types/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hem/leaves/types/${id}`);
       fetchLeaveData();
     } catch (err) {
       alert('Failed to delete leave scheme');
@@ -182,8 +182,8 @@ export default function LeaveManagement() {
   const fetchLeaveData = async () => {
     try {
       const [typeRes, reqRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/leaves/types`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/leaves/requests`)
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/leaves/types`),
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/leaves/requests`)
       ]);
       setLeaveTypes(typeRes.data || []);
       if (typeRes.data && typeRes.data.length > 0) {
@@ -210,7 +210,7 @@ export default function LeaveManagement() {
         leaveTypeCode: selType?.code || 'PL',
         daysCount: applyForm.isHalfDay ? 0.5 : 1
       };
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/leaves/requests`, payload);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/leaves/requests`, payload);
       setShowApplyModal(false);
       setApplyForm({
         employeeName: '',
@@ -241,7 +241,7 @@ export default function LeaveManagement() {
       const person = sampleNames[Math.floor(Math.random() * sampleNames.length)];
       const sampleType = leaveTypes[Math.floor(Math.random() * leaveTypes.length)] || leaveTypes[0];
 
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/leaves/requests`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/leaves/requests`, {
         employeeName: person.name,
         employeeId: person.id,
         department: person.dept,
@@ -262,7 +262,7 @@ export default function LeaveManagement() {
   const handleCreateLeaveType = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/leaves/types`, typeForm);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/leaves/types`, typeForm);
       setShowAddTypeModal(false);
       setTypeForm({
         name: '',
@@ -288,7 +288,7 @@ export default function LeaveManagement() {
 
   const handleReviewRequest = async (id: string, newStatus: 'Approved' | 'Rejected', notes: string = '') => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/leaves/requests/${id}/status`, {
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/leaves/requests/${id}/status`, {
         status: newStatus,
         reviewerNotes: notes || (newStatus === 'Approved' ? 'Authorized by Manager' : 'Declined due to project deliverable')
       });

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   Compass, Plus, Search, Filter, Globe, Users, ExternalLink, Pencil, Trash2, 
@@ -68,7 +68,7 @@ export default function CandidateSourcing() {
       skills: editCandidateForm.skills.split(',').map(s => s.trim())
     };
     try {
-      const res = await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/sourcing/candidates/${editingCandidate.id}`, payload);
+      const res = await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/sourcing/candidates/${editingCandidate.id}`, payload);
       setCandidates(candidates.map(c => c.id === editingCandidate.id ? res.data : c));
       setShowEditCandidateModal(false);
     } catch (err) {
@@ -80,7 +80,7 @@ export default function CandidateSourcing() {
   const handleDeleteCandidate = async (id: string) => {
     if (!confirm('Are you sure you want to delete this candidate?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/sourcing/candidates/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/sourcing/candidates/${id}`);
       setCandidates(candidates.filter(c => c.id !== id));
     } catch (err) {
       setCandidates(candidates.filter(c => c.id !== id));
@@ -105,7 +105,7 @@ export default function CandidateSourcing() {
     e.preventDefault();
     if (!editingCampaign) return;
     try {
-      const res = await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/sourcing/campaigns/${editingCampaign.id}`, editCampaignForm);
+      const res = await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/sourcing/campaigns/${editingCampaign.id}`, editCampaignForm);
       setCampaigns(campaigns.map(c => c.id === editingCampaign.id ? res.data : c));
       setShowEditCampaignModal(false);
     } catch (err) {
@@ -117,7 +117,7 @@ export default function CandidateSourcing() {
   const handleDeleteCampaign = async (id: string) => {
     if (!confirm('Delete this sourcing campaign?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/sourcing/campaigns/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/sourcing/campaigns/${id}`);
       setCampaigns(campaigns.filter(c => c.id !== id));
     } catch (err) {
       setCampaigns(campaigns.filter(c => c.id !== id));
@@ -149,9 +149,9 @@ export default function CandidateSourcing() {
   const fetchData = async () => {
     try {
       const [chRes, cmpRes, candRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/sourcing/channels`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/sourcing/campaigns`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/resumes`)
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/sourcing/channels`),
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/sourcing/campaigns`),
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/resumes`)
       ]);
       setChannels(chRes.data);
       setCampaigns(cmpRes.data);
@@ -177,7 +177,7 @@ export default function CandidateSourcing() {
   const handleAddCandidate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/sourcing/candidates`, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/sourcing/candidates`, {
         ...newCandidate,
         skills: newCandidate.skills.split(',').map(s => s.trim())
       });
@@ -211,7 +211,7 @@ export default function CandidateSourcing() {
   const handleAddCampaign = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/sourcing/campaigns`, newCampaign);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/sourcing/campaigns`, newCampaign);
       setCampaigns([res.data, ...campaigns]);
       setShowAddCampaignModal(false);
     } catch (err) {

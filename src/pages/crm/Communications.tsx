@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { MessageCircle, Mail, Phone, Send, Pencil, Trash2, X } from 'lucide-react';
 import CRMNavigation from '../../components/CRMNavigation';
@@ -31,8 +31,8 @@ export default function Communications() {
   const fetchData = async () => {
     try {
       const [logsRes, leadsRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/communications`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/leads`)
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/crm/communications`),
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/crm/leads`)
       ]);
       setLogs(logsRes.data);
       setLeads(leadsRes.data);
@@ -51,7 +51,7 @@ export default function Communications() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/communications`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/crm/communications`, {
         ...newLog,
         createdById: currentUser?.id
       });
@@ -77,7 +77,7 @@ export default function Communications() {
     e.preventDefault();
     if (!editingLog) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/communications/${editingLog.id}`, editLogForm);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/crm/communications/${editingLog.id}`, editLogForm);
       setShowEditModal(false);
       setEditingLog(null);
       fetchData();
@@ -90,7 +90,7 @@ export default function Communications() {
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to permanently delete this communication log?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/communications/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/crm/communications/${id}`);
       fetchData();
     } catch (err) {
       console.error(err);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   Laptop, Smartphone, Monitor, Plus, CheckCircle2, Trash2, Pencil,
@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import ERPNavigation from '../../components/ERPNavigation';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 interface FixedAssetScheduleItem {
   id: string;

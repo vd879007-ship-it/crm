@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { 
@@ -14,7 +14,7 @@ export default function RecruitmentDashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/analytics`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/analytics`);
       setData(res.data);
     } catch (err) {
       console.error(err);

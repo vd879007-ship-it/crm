@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   Target, 
@@ -71,8 +71,8 @@ export default function GoalsCampaigns() {
   const fetchData = async () => {
     try {
       const [goalsRes, campaignsRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/goals`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/campaigns`)
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/crm/goals`),
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/crm/campaigns`)
       ]);
       setGoals(Array.isArray(goalsRes.data) ? goalsRes.data : []);
       setCampaigns(Array.isArray(campaignsRes.data) ? campaignsRes.data : []);
@@ -126,9 +126,9 @@ export default function GoalsCampaigns() {
     e.preventDefault();
     try {
       if (editingGoal) {
-        await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/goals/${editingGoal.id}`, goalForm);
+        await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/crm/goals/${editingGoal.id}`, goalForm);
       } else {
-        await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/goals`, goalForm);
+        await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/crm/goals`, goalForm);
       }
       setShowGoalModal(false);
       setEditingGoal(null);
@@ -142,7 +142,7 @@ export default function GoalsCampaigns() {
   const handleDeleteGoal = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this target goal?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/goals/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/crm/goals/${id}`);
       fetchData();
     } catch (err) {
       console.error(err);
@@ -193,9 +193,9 @@ export default function GoalsCampaigns() {
     e.preventDefault();
     try {
       if (editingCampaign) {
-        await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/campaigns/${editingCampaign.id}`, campaignForm);
+        await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/crm/campaigns/${editingCampaign.id}`, campaignForm);
       } else {
-        await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/campaigns`, campaignForm);
+        await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/crm/campaigns`, campaignForm);
       }
       setShowCampaignModal(false);
       setEditingCampaign(null);
@@ -209,7 +209,7 @@ export default function GoalsCampaigns() {
   const handleDeleteCampaign = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this marketing campaign?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/campaigns/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/crm/campaigns/${id}`);
       fetchData();
     } catch (err) {
       console.error(err);

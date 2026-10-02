@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { MessageSquare, RefreshCw, Plus, Pencil, Trash2, X, UserPlus } from 'lucide-react';
@@ -38,7 +38,7 @@ export default function Directory() {
   const fetchEmployees = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/employees`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/employees`);
       setEmployees(res.data);
     } catch (err) {
       console.error('Failed to load employee directory', err);
@@ -54,7 +54,7 @@ export default function Directory() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/employees`, createForm);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/employees`, createForm);
       setShowCreateModal(false);
       setCreateForm({ name: '', email: '', role: 'Employee', department: 'Engineering' });
       fetchEmployees();
@@ -79,7 +79,7 @@ export default function Directory() {
     e.preventDefault();
     if (!editingEmployee) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/employees/${editingEmployee.id}`, editForm);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/employees/${editingEmployee.id}`, editForm);
       setShowEditModal(false);
       setEditingEmployee(null);
       fetchEmployees();
@@ -92,7 +92,7 @@ export default function Directory() {
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to remove this employee from directory?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/employees/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/employees/${id}`);
       fetchEmployees();
     } catch (err) {
       console.error(err);
@@ -105,7 +105,7 @@ export default function Directory() {
       const currentUserId = employees[0]?.id;
       if (!currentUserId) return;
 
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/channels/dm`, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/channels/dm`, {
         targetUserId: employee.id,
         currentUserId
       });

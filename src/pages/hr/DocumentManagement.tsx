@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   Pencil,
@@ -73,7 +73,7 @@ export default function DocumentManagement() {
 
   const fetchDocuments = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/documents`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hr/documents`);
       setDocuments(res.data || []);
     } catch (err) {
       console.error('Failed to fetch documents:', err);
@@ -95,7 +95,7 @@ export default function DocumentManagement() {
     e.preventDefault();
     if (!editingDoc) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/documents/${editingDoc.id}`, editingDoc);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hr/documents/${editingDoc.id}`, editingDoc);
       setShowEditModal(false);
       setEditingDoc(null);
       fetchDocuments();
@@ -108,7 +108,7 @@ export default function DocumentManagement() {
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/documents`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/documents`, {
         ...formData,
         fileUrl: `https://storage.athenahr.io/vault/${formData.category.toLowerCase().replace(/\s+/g, '_')}_${Date.now()}.pdf`
       });
@@ -129,7 +129,7 @@ export default function DocumentManagement() {
 
   const handleVerify = async (id: string, verified: boolean) => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/documents/${id}/verify`, {
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hr/documents/${id}/verify`, {
         verified,
         verifiedBy: 'HR Compliance Officer',
         notes: verified ? 'Officially validated with original records' : 'Verification pending resubmission'
@@ -143,7 +143,7 @@ export default function DocumentManagement() {
   const handleDelete = async (id: string) => {
     if (!window.confirm('Delete this record from the vault?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/documents/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hr/documents/${id}`);
       fetchDocuments();
     } catch (err) {
       console.error(err);
@@ -179,7 +179,7 @@ export default function DocumentManagement() {
     ];
 
     for (const item of samples) {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/documents`, item);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/documents`, item);
     }
     fetchDocuments();
   };

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   GitBranch, Plus, Search, Filter, GripVertical, 
@@ -43,7 +43,7 @@ export default function HiringWorkflow() {
     e.preventDefault();
     if (!editingCandidate) return;
     try {
-      const res = await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/sourcing/candidates/${editingCandidate.id}`, editForm);
+      const res = await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/sourcing/candidates/${editingCandidate.id}`, editForm);
       setCandidates(candidates.map(c => c.id === editingCandidate.id ? res.data : c));
       if (selectedCandidate?.id === editingCandidate.id) setSelectedCandidate(res.data);
       setShowEditModal(false);
@@ -57,7 +57,7 @@ export default function HiringWorkflow() {
   const handleDeleteCandidate = async (id: string) => {
     if (!confirm('Are you sure you want to remove this candidate from the ATS workflow?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/sourcing/candidates/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/sourcing/candidates/${id}`);
       setCandidates(candidates.filter(c => c.id !== id));
       if (selectedCandidate?.id === id) setSelectedCandidate(null);
     } catch (err) {
@@ -68,7 +68,7 @@ export default function HiringWorkflow() {
 
   const fetchWorkflow = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/workflow`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/workflow`);
       setCandidates(res.data.candidates || []);
       if (res.data.stages) setStages(res.data.stages);
     } catch (err) {
@@ -85,7 +85,7 @@ export default function HiringWorkflow() {
 
   const handleStageChange = async (candidateId: string, newStage: string) => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/workflow/${candidateId}/stage`, { stage: newStage });
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/workflow/${candidateId}/stage`, { stage: newStage });
       setCandidates(candidates.map(c => c.id === candidateId ? { ...c, stage: newStage } : c));
     } catch (err) {
       setCandidates(candidates.map(c => c.id === candidateId ? { ...c, stage: newStage } : c));

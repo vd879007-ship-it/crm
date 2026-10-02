@@ -53,7 +53,7 @@ export default function Chat() {
 
     fetchChannels();
 
-    const newSocket = io(import.meta.env.VITE_API_URL || 'http://localhost:4000');
+    const newSocket = io(import.meta.env.VITE_API_URL || undefined);
     setSocket(newSocket);
 
     return () => {
@@ -62,7 +62,7 @@ export default function Chat() {
   }, []);
 
   const fetchChannels = () => {
-    axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/channels`).then(res => {
+    axios.get(`${import.meta.env.VITE_API_URL || ''}/api/channels`).then(res => {
       setChannels(res.data);
       const stateChannelId = location.state?.activeChannelId;
       if (stateChannelId) {
@@ -97,7 +97,7 @@ export default function Chat() {
   // Handle active channel change and room sockets
   useEffect(() => {
     if (activeChannel) {
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/channels/${activeChannel.id}/messages`).then(res => {
+      axios.get(`${import.meta.env.VITE_API_URL || ''}/api/channels/${activeChannel.id}/messages`).then(res => {
         setMessages(res.data);
       });
 
@@ -141,7 +141,7 @@ export default function Chat() {
       const formData = new FormData();
       formData.append('file', selectedFile);
       try {
-        const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/upload`, formData);
+        const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/upload`, formData);
         fileUrl = res.data.url;
       } catch (err) {
         console.error('File upload failed', err);
@@ -164,7 +164,7 @@ export default function Chat() {
     if (!newChannelName.trim()) return;
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/channels`, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/channels`, {
         name: newChannelName.trim(),
         isGroup: true,
         userIds: currentUser ? [currentUser.id] : []

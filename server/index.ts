@@ -710,8 +710,32 @@ app.use((req, res, next) => {
   });
 });
 
-httpServer.listen(PORT, HOST, () => {
+async function bootstrapAdmin() {
+  try {
+    const adminUser = await prisma.user.findFirst({ where: { username: 'admin' } });
+    if (!adminUser) {
+      const hashedAdminPassword = await bcrypt.hash('skillstar@2026', 10);
+      await prisma.user.create({
+        data: {
+          username: 'admin',
+          email: 'admin@skillstar.com',
+          name: 'Super Admin',
+          password: hashedAdminPassword,
+          role: 'Admin',
+          department: 'Management',
+          status: 'APPROVED'
+        }
+      });
+      console.log('✅ Default superadmin account bootstrapped (username: admin / pass: skillstar@2026)');
+    }
+  } catch (error) {
+    console.error('Failed to bootstrap admin user:', error);
+  }
+}
+
+httpServer.listen(PORT, HOST, async () => {
   console.log(`Server running on http://${HOST}:${PORT}`);
+  await bootstrapAdmin();
 });
 
 export { app, httpServer };

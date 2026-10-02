@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   Mail, MessageSquare, Send, Calendar, Clock, Video, 
@@ -35,7 +35,7 @@ export default function CandidateCommunications() {
   const handleAddTemplateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/communications/templates`, templateForm);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/communications/templates`, templateForm);
       setTemplates([...templates, res.data]);
       setShowAddTemplateModal(false);
     } catch (err) {
@@ -60,7 +60,7 @@ export default function CandidateCommunications() {
     e.preventDefault();
     if (!editingTemplate) return;
     try {
-      const res = await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/communications/templates/${editingTemplate.id}`, templateForm);
+      const res = await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/communications/templates/${editingTemplate.id}`, templateForm);
       setTemplates(templates.map(t => t.id === editingTemplate.id ? res.data : t));
       setShowEditTemplateModal(false);
     } catch (err) {
@@ -72,7 +72,7 @@ export default function CandidateCommunications() {
   const handleDeleteTemplate = async (id: string) => {
     if (!confirm('Are you sure you want to delete this template?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/communications/templates/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/communications/templates/${id}`);
       setTemplates(templates.filter(t => t.id !== id));
     } catch (err) {
       setTemplates(templates.filter(t => t.id !== id));
@@ -82,7 +82,7 @@ export default function CandidateCommunications() {
   const handleDeleteComm = async (id: string) => {
     if (!confirm('Delete this communication record?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/communications/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/communications/${id}`);
       setCommunications(communications.filter(c => c.id !== id));
     } catch (err) {
       setCommunications(communications.filter(c => c.id !== id));
@@ -113,8 +113,8 @@ export default function CandidateCommunications() {
   const fetchData = async () => {
     try {
       const [commRes, tplRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/communications`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/communications/templates`)
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/communications`),
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/communications/templates`)
       ]);
       setCommunications(commRes.data);
       setTemplates(tplRes.data);
@@ -185,7 +185,7 @@ export default function CandidateCommunications() {
   const handleSendComm = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/communications`, composeForm);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/communications`, composeForm);
       setCommunications([res.data, ...communications]);
       setShowComposeModal(false);
     } catch (err) {

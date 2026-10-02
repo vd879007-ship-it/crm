@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Users, Briefcase, Calendar, Phone, Plus, Trash2, Pencil, Building2, ArrowRight } from 'lucide-react';
@@ -29,7 +29,7 @@ export default function Employees() {
     e.preventDefault();
     if (!editingEmp) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/employees/${editingEmp.id}`, editEmpForm);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/employees/${editingEmp.id}`, editEmpForm);
       setShowEditEmpModal(false);
       fetchEmployees();
     } catch (err) {
@@ -53,7 +53,7 @@ export default function Employees() {
 
   const fetchEmployees = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/employees`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/employees`);
       setEmployees(res.data);
     } catch (err) {
       console.error(err);
@@ -67,7 +67,7 @@ export default function Employees() {
   const handleCreateEmployee = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/employees`, newEmployee);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/employees`, newEmployee);
       setShowCreateModal(false);
       setNewEmployee({
         name: '',
@@ -88,7 +88,7 @@ export default function Employees() {
   const handleDeleteEmployee = async (id: string, name: string) => {
     if (!window.confirm(`Are you sure you want to delete employee "${name}"? This will remove all their records.`)) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/employees/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hem/employees/${id}`);
       fetchEmployees();
     } catch (err) {
       console.error('Failed to delete employee', err);
@@ -100,7 +100,7 @@ export default function Employees() {
     e.preventDefault();
     if (!selectedEmp) return;
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/employees/${selectedEmp.id}/detail`, detailForm);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/employees/${selectedEmp.id}/detail`, detailForm);
       setSelectedEmp(null);
       fetchEmployees();
     } catch (err) {

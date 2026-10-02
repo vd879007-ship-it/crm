@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Check, X, Clock, ShieldAlert, Pencil, Trash2 } from 'lucide-react';
 
 interface PendingUser {
@@ -26,7 +26,7 @@ export default function Approvals() {
 
   const fetchPendingUsers = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/admin/pending`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/admin/pending`);
       const data = await res.json();
       if (Array.isArray(data)) setPendingUsers(data);
     } catch (err) {
@@ -42,7 +42,7 @@ export default function Approvals() {
 
   const handleAction = async (userId: string, action: 'approve' | 'reject') => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/admin/${action}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/admin/${action}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId })
@@ -72,7 +72,7 @@ export default function Approvals() {
     e.preventDefault();
     if (!editingUser) return;
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/admin/pending/${editingUser.id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/admin/pending/${editingUser.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editForm)
@@ -93,7 +93,7 @@ export default function Approvals() {
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to permanently delete this pending registration?')) return;
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/admin/pending/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/admin/pending/${id}`, {
         method: 'DELETE'
       });
       if (res.ok) {

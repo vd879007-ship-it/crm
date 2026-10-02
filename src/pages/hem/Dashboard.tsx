@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { 
@@ -30,13 +30,13 @@ export default function HEMDashboard() {
 
   useEffect(() => {
     Promise.all([
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/employees`).catch(() => ({ data: [] })),
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/attendance`).catch(() => ({ data: [] })),
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/payroll`).catch(() => ({ data: [] })),
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/performance`).catch(() => ({ data: [] })),
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/onboarding`).catch(() => ({ data: [] })),
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/alerts`).catch(() => ({ data: [] })),
-      axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/policies`).catch(() => ({ data: [] })),
+      axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/employees`).catch(() => ({ data: [] })),
+      axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/attendance`).catch(() => ({ data: [] })),
+      axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/payroll`).catch(() => ({ data: [] })),
+      axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/performance`).catch(() => ({ data: [] })),
+      axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/onboarding`).catch(() => ({ data: [] })),
+      axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/alerts`).catch(() => ({ data: [] })),
+      axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/policies`).catch(() => ({ data: [] })),
     ]).then(([empRes, attRes, payRes, perfRes, onbRes, altRes, polRes]) => {
       setStats({
         employees: (empRes.data || []).length,

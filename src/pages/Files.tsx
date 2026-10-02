@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Upload, FileText, Download, Hash, User as UserIcon, Calendar, RefreshCw, Pencil, Trash2, X } from 'lucide-react';
 
@@ -22,7 +22,7 @@ export default function Files() {
   const fetchFiles = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/files`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/files`);
       setFiles(res.data);
     } catch (err) {
       console.error('Failed to fetch shared files', err);
@@ -45,7 +45,7 @@ export default function Files() {
     e.preventDefault();
     if (!editingFile) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/files/${editingFile.id}`, {
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/files/${editingFile.id}`, {
         content: editContent
       });
       setShowEditModal(false);
@@ -60,7 +60,7 @@ export default function Files() {
   const handleDeleteFile = async (id: string) => {
     if (!window.confirm('Are you sure you want to permanently delete this shared file?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/files/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/files/${id}`);
       fetchFiles();
     } catch (err) {
       console.error('Failed to delete file', err);
@@ -76,18 +76,18 @@ export default function Files() {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      const uploadRes = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/upload`, formData);
+      const uploadRes = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/upload`, formData);
 
       // Get General channel and current user
-      const channelsRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/channels`);
-      const usersRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/employees`);
+      const channelsRes = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/channels`);
+      const usersRes = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/employees`);
       
       const channelId = channelsRes.data[0]?.id;
       const userId = usersRes.data[0]?.id;
 
       if (channelId && userId) {
         // Save as message attachment so it appears in workspace files
-        await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/channels/` + channelId + '/messages', {
+        await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/channels/` + channelId + '/messages', {
           content: `Uploaded file: ${file.name}`,
           channelId,
           userId,

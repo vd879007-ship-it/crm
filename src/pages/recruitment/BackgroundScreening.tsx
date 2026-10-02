@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   ShieldCheck, AlertTriangle, CheckCircle2, Clock, Pencil, Trash2, 
@@ -43,7 +43,7 @@ export default function BackgroundScreening() {
     e.preventDefault();
     if (!editingScreening) return;
     try {
-      const res = await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/screening/${editingScreening.id}`, editForm);
+      const res = await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/screening/${editingScreening.id}`, editForm);
       setScreenings(screenings.map(s => s.id === editingScreening.id ? res.data : s));
       setShowEditModal(false);
     } catch (err) {
@@ -55,7 +55,7 @@ export default function BackgroundScreening() {
   const handleDeleteScreening = async (id: string) => {
     if (!confirm('Are you sure you want to delete this background screening record?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/screening/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/screening/${id}`);
       setScreenings(screenings.filter(s => s.id !== id));
       if (selectedReport?.id === id) setSelectedReport(null);
     } catch (err) {
@@ -75,7 +75,7 @@ export default function BackgroundScreening() {
 
   const fetchScreenings = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/screening`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/screening`);
       setScreenings(res.data);
     } catch (err) {
       console.error(err);
@@ -92,7 +92,7 @@ export default function BackgroundScreening() {
   const handleInitiateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/screening`, initiateForm);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/screening`, initiateForm);
       setScreenings([res.data, ...screenings]);
       setShowInitiateModal(false);
       setInitiateForm({
@@ -126,7 +126,7 @@ export default function BackgroundScreening() {
 
   const handleUpdateStatus = async (id: string, status: string) => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/screening/${id}/status`, { status });
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/screening/${id}/status`, { status });
       setScreenings(screenings.map(s => s.id === id ? { ...s, status } : s));
       if (selectedReport?.id === id) {
         setSelectedReport({ ...selectedReport, status });

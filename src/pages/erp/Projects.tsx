@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FolderGit2, CheckCircle2, Clock, Calendar, Plus, Trash2, Pencil } from 'lucide-react';
 import ERPNavigation from '../../components/ERPNavigation';
@@ -27,7 +27,7 @@ export default function Projects() {
     e.preventDefault();
     if (!editingProject) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/erp/projects/${editingProject.id}`, editProjectForm);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/erp/projects/${editingProject.id}`, editProjectForm);
       setShowEditModal(false);
       fetchProjects();
     } catch (err) {
@@ -39,7 +39,7 @@ export default function Projects() {
 
   const fetchProjects = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/erp/projects`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/erp/projects`);
       setProjects(res.data);
     } catch (err) {
       console.error(err);
@@ -53,7 +53,7 @@ export default function Projects() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/erp/projects`, newProject);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/erp/projects`, newProject);
       setShowModal(false);
       setNewProject({ name: '', description: '', status: 'Planning', startDate: '', endDate: '' });
       fetchProjects();
@@ -65,7 +65,7 @@ export default function Projects() {
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this project?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/erp/projects/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/erp/projects/${id}`);
       fetchProjects();
     } catch (err) {
       console.error(err);

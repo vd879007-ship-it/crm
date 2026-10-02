@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   FileText, Pencil, Plus, Search, Filter, Download, Printer, Trash2, CheckCircle2, ShoppingCart, ArrowDownRight, Tag,
@@ -9,7 +9,7 @@ import {
 import { Link } from 'react-router-dom';
 import ERPNavigation from '../../components/ERPNavigation';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 interface InvoiceItem {
   id?: string;

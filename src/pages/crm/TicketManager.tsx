@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   LifeBuoy, 
@@ -78,7 +78,7 @@ export default function TicketManager() {
 
   const fetchTickets = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/tickets`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/crm/tickets`);
       setTickets(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error('Failed to fetch tickets:', err);
@@ -127,7 +127,7 @@ export default function TicketManager() {
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/tickets`, formData);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/crm/tickets`, formData);
       setShowCreateModal(false);
       fetchTickets();
     } catch (err) {
@@ -140,7 +140,7 @@ export default function TicketManager() {
     e.preventDefault();
     if (!editingTicket) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/tickets/${editingTicket.id}`, formData);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/crm/tickets/${editingTicket.id}`, formData);
       setShowEditModal(false);
       setEditingTicket(null);
       fetchTickets();
@@ -153,7 +153,7 @@ export default function TicketManager() {
   const handleDeleteTicket = async (id: string) => {
     if (!window.confirm('Are you sure you want to permanently delete this support ticket?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/tickets/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/crm/tickets/${id}`);
       fetchTickets();
     } catch (err) {
       console.error(err);
@@ -163,7 +163,7 @@ export default function TicketManager() {
 
   const handleQuickStatusChange = async (ticket: any, newStatus: string) => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/tickets/${ticket.id}`, {
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/crm/tickets/${ticket.id}`, {
         status: newStatus
       });
       fetchTickets();
@@ -243,7 +243,7 @@ export default function TicketManager() {
     if (!selectedTicketForWO) return;
     setWorkOrderSubmitting(true);
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/tickets/${selectedTicketForWO.id}/work-order`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/crm/tickets/${selectedTicketForWO.id}/work-order`, {
         technicianName: workOrderForm.technicianName,
         technicianPhone: workOrderForm.technicianPhone,
         serviceLocation: workOrderForm.serviceLocation,
@@ -273,13 +273,13 @@ export default function TicketManager() {
     setWorkOrderSubmitting(true);
     try {
       // First ensure work order is created/updated
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/tickets/${selectedTicketForWO.id}/work-order`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/crm/tickets/${selectedTicketForWO.id}/work-order`, {
         ...workOrderForm,
         status: 'In-Progress'
       });
 
       // Complete work order & record parts and signature
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/tickets/${selectedTicketForWO.id}/work-order/complete`, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/crm/tickets/${selectedTicketForWO.id}/work-order/complete`, {
         partsUsed: workOrderForm.partsUsed,
         customerSignature: workOrderForm.customerSignature,
         feedbackRating: workOrderForm.feedbackRating,
@@ -292,7 +292,7 @@ export default function TicketManager() {
 
       // Create draft invoice in ERP
       try {
-        await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/erp/invoices`, {
+        await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/erp/invoices`, {
           customerName: selectedTicketForWO.customerName,
           customerEmail: selectedTicketForWO.customerEmail,
           items: [

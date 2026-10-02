@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   Users, 
@@ -92,7 +92,7 @@ export default function EmployeeInfo() {
 
   const fetchEmployees = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/employees`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hr/employees`);
       setEmployees(res.data || []);
     } catch (err) {
       console.error('Failed to fetch employees:', err);
@@ -109,9 +109,9 @@ export default function EmployeeInfo() {
     e.preventDefault();
     try {
       if (selectedEmp) {
-        await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/employees/${selectedEmp.id}`, formData);
+        await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hr/employees/${selectedEmp.id}`, formData);
       } else {
-        await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/employees`, formData);
+        await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/employees`, formData);
       }
       setShowModal(false);
       setSelectedEmp(null);
@@ -125,7 +125,7 @@ export default function EmployeeInfo() {
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this employee profile?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/employees/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hr/employees/${id}`);
       fetchEmployees();
     } catch (err) {
       console.error(err);
@@ -245,7 +245,7 @@ export default function EmployeeInfo() {
     ];
 
     for (const item of samples) {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/employees`, item);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/employees`, item);
     }
     fetchEmployees();
   };

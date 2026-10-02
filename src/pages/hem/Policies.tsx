@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   Pencil,
@@ -143,8 +143,8 @@ export default function Policies() {
   const fetchPolicies = async () => {
     try {
       const [res, rulesRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/policies`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/policies/rules`).catch(() => ({ data: null }))
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/policies`),
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/policies/rules`).catch(() => ({ data: null }))
       ]);
       setPolicies(res.data || []);
       if (rulesRes && rulesRes.data) {
@@ -178,7 +178,7 @@ export default function Policies() {
     e.preventDefault();
     if (!editingPolicy) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/policies/${editingPolicy.id}`, editingPolicy);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/policies/${editingPolicy.id}`, editingPolicy);
       setShowEditPolicyModal(false);
       setEditingPolicy(null);
       fetchPolicies();
@@ -192,7 +192,7 @@ export default function Policies() {
   const handleDeletePolicy = async (id: string) => {
     if (!window.confirm('Are you sure you want to permanently delete this policy?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/policies/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hem/policies/${id}`);
       fetchPolicies();
       showToast('Policy deleted successfully');
     } catch (err) {
@@ -210,7 +210,7 @@ export default function Policies() {
     e.preventDefault();
     if (!editingHoliday) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/policies/holidays/${editingHoliday.id}`, editingHoliday);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/policies/holidays/${editingHoliday.id}`, editingHoliday);
       setShowEditHolidayModal(false);
       setEditingHoliday(null);
       fetchPolicies();
@@ -224,7 +224,7 @@ export default function Policies() {
   const handleDeleteHoliday = async (id: string) => {
     if (!window.confirm('Delete this official holiday from calendar?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/policies/holidays/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hem/policies/holidays/${id}`);
       fetchPolicies();
       showToast('Holiday removed');
     } catch (err) {
@@ -236,7 +236,7 @@ export default function Policies() {
   const handlePublishPolicy = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/policies`, newPolicy);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/policies`, newPolicy);
       setShowPublishModal(false);
       setNewPolicy({
         code: '',
@@ -262,7 +262,7 @@ export default function Policies() {
     if (!selectedPolicyForRead || !hasReadAgreement || !eSignName) return;
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/policies/${selectedPolicyForRead.id}/acknowledge`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/policies/${selectedPolicyForRead.id}/acknowledge`, {
         userId: currentUser.id || 'USR-CURRENT',
         userName: eSignName,
         userEmail: currentUser.email || 'user@athenahr.io',
@@ -281,7 +281,7 @@ export default function Policies() {
 
   const handleRemindPending = async (policyId: string) => {
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/policies/${policyId}/remind`);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/policies/${policyId}/remind`);
       showToast('Reminders dispatched to pending staff!');
     } catch (err) {
       console.error(err);
@@ -374,7 +374,7 @@ Employees are eligible for home workspace reimbursement. Stable broadband with m
     ];
 
     for (const p of samples) {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/policies`, p);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/policies`, p);
     }
     fetchPolicies();
     showToast('Standard policy library loaded!');
@@ -401,7 +401,7 @@ Employees are eligible for home workspace reimbursement. Stable broadband with m
 
   const handleSaveRules = async () => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/policies/rules`, attendanceRules);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/policies/rules`, attendanceRules);
       showToast('Attendance & deduction policy rules saved successfully!');
     } catch (err) {
       console.error(err);
@@ -412,7 +412,7 @@ Employees are eligible for home workspace reimbursement. Stable broadband with m
   const handleAddHoliday = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/policies/holidays`, newHoliday);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/policies/holidays`, newHoliday);
       setShowAddHolidayModal(false);
       setNewHoliday({
         date: new Date().toISOString().split('T')[0],

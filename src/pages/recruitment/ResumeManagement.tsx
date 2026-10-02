@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   FileCheck, Search, Filter, Sparkles, Download, Eye, 
@@ -43,7 +43,7 @@ export default function ResumeManagement() {
 
   const fetchResumes = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/resumes`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/resumes`);
       setCandidates(res.data);
     } catch (err) {
       console.error(err);
@@ -81,7 +81,7 @@ export default function ResumeManagement() {
       skills: editForm.skills.split(',').map(s => s.trim()).filter(Boolean)
     };
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/resumes/${editingCandidate.id}`, updatedCandidate);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/resumes/${editingCandidate.id}`, updatedCandidate);
     } catch (err) {
       console.warn('Backend update error, updating local state:', err);
     }
@@ -96,7 +96,7 @@ export default function ResumeManagement() {
   const handleDeleteCandidate = async (id: string) => {
     if (!window.confirm('Are you sure you want to permanently delete this candidate resume?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/resumes/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/resumes/${id}`);
     } catch (err) {
       console.warn('Backend delete error, updating local state:', err);
     }
@@ -113,7 +113,7 @@ export default function ResumeManagement() {
   const handleParseSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/resumes/parse`, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/resumes/parse`, {
         ...parseForm,
         skills: parseForm.skills.split(',').map(s => s.trim())
       });

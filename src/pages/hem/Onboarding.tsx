@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   Pencil,
@@ -108,7 +108,7 @@ export default function Onboarding() {
 
   const fetchRecords = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/onboarding`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/onboarding`);
       setRecords(res.data || []);
       if (selectedRecord) {
         const updated = (res.data || []).find((r: OnboardingRecord) => r.id === selectedRecord.id);
@@ -135,7 +135,7 @@ export default function Onboarding() {
     e.preventDefault();
     if (!editingHire) return;
     try {
-      const res = await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/onboarding/${editingHire.id}`, editingHire);
+      const res = await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/onboarding/${editingHire.id}`, editingHire);
       setShowEditModal(false);
       setEditingHire(null);
       if (selectedRecord?.id === editingHire.id) {
@@ -152,7 +152,7 @@ export default function Onboarding() {
     if (e) e.stopPropagation();
     if (!window.confirm('Are you sure you want to delete this onboarding record?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/onboarding/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hem/onboarding/${id}`);
       if (selectedRecord?.id === id) {
         setSelectedRecord(null);
       }
@@ -166,7 +166,7 @@ export default function Onboarding() {
   const handleCreateNewHire = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/onboarding`, newHire);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/onboarding`, newHire);
       setShowCreateModal(false);
       setNewHire({
         name: '',
@@ -191,7 +191,7 @@ export default function Onboarding() {
     if (!selectedRecord) return;
     const newStatus = currentStatus === 'Completed' ? 'Pending' : 'Completed';
     try {
-      const res = await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/onboarding/${selectedRecord.id}/task`, {
+      const res = await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/onboarding/${selectedRecord.id}/task`, {
         taskId,
         status: newStatus
       });
@@ -205,7 +205,7 @@ export default function Onboarding() {
   const handleDocVerify = async (docId: string, status: 'Verified' | 'Rejected') => {
     if (!selectedRecord) return;
     try {
-      const res = await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/onboarding/${selectedRecord.id}/document/${docId}`, {
+      const res = await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/onboarding/${selectedRecord.id}/document/${docId}`, {
         status,
         notes: status === 'Verified' ? 'Approved by HR Operations' : 'Document illegible or missing seal. Please re-upload.'
       });
@@ -220,7 +220,7 @@ export default function Onboarding() {
     e.preventDefault();
     if (!selectedRecord || !activeDocToUpload) return;
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/onboarding/${selectedRecord.id}/document`, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/onboarding/${selectedRecord.id}/document`, {
         docId: activeDocToUpload.id,
         fileName: uploadFileName || activeDocToUpload.name,
         fileUrl: `https://storage.athenahr.io/documents/${activeDocToUpload.id}_${Date.now()}.pdf`
@@ -238,7 +238,7 @@ export default function Onboarding() {
     e.preventDefault();
     if (!selectedRecord || !signatureName) return;
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/onboarding/${selectedRecord.id}/sign`, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/onboarding/${selectedRecord.id}/sign`, {
         signerName: signatureName,
         signatureData: `SHA256_ESIGN_${Date.now()}`
       });
@@ -253,7 +253,7 @@ export default function Onboarding() {
 
   const handleCompleteOnboarding = async (recordId: string) => {
     try {
-      const res = await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/onboarding/${recordId}/status`, {
+      const res = await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/onboarding/${recordId}/status`, {
         status: 'Completed'
       });
       setSelectedRecord(res.data);
@@ -277,7 +277,7 @@ export default function Onboarding() {
         employmentType: 'Full-Time',
         welcomeMessage: 'Excited to have you join our core engineering squad building the next-gen HRMS!'
       };
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/onboarding`, sample);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/onboarding`, sample);
       fetchRecords();
       setSelectedRecord(res.data);
     } catch (err) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   ShoppingCart, Pencil, Plus, Search, Filter, Trash2, CheckCircle2,
@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import ERPNavigation from '../../components/ERPNavigation';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 interface PurchaseItem {
   id?: string;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   CalendarDays, 
@@ -109,7 +109,7 @@ export default function ShiftManagement() {
     e.preventDefault();
     if (!editingShift) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/shifts/types/${editingShift.id}`, editShiftForm);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/shifts/types/${editingShift.id}`, editShiftForm);
       setShowEditShiftModal(false);
       fetchShiftData();
     } catch (err) {
@@ -120,7 +120,7 @@ export default function ShiftManagement() {
   const handleDeleteShift = async (id: string, name: string) => {
     if (!confirm(`Are you sure you want to delete shift "${name}"?`)) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/shifts/types/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hem/shifts/types/${id}`);
       fetchShiftData();
     } catch (err) {
       alert('Failed to delete shift definition');
@@ -142,7 +142,7 @@ export default function ShiftManagement() {
     e.preventDefault();
     if (!editingRoster) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/shifts/roster/${editingRoster.id}`, editRosterForm);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/shifts/roster/${editingRoster.id}`, editRosterForm);
       setShowEditRosterModal(false);
       fetchShiftData();
     } catch (err) {
@@ -153,7 +153,7 @@ export default function ShiftManagement() {
   const handleDeleteRoster = async (id: string) => {
     if (!confirm('Are you sure you want to remove this roster assignment?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/shifts/roster/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hem/shifts/roster/${id}`);
       fetchShiftData();
     } catch (err) {
       alert('Failed to delete roster assignment');
@@ -197,9 +197,9 @@ export default function ShiftManagement() {
   const fetchShiftData = async () => {
     try {
       const [shiftsRes, rosterRes, swapsRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/shifts/types`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/shifts/roster`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/shifts/swaps`)
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/shifts/types`),
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/shifts/roster`),
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/shifts/swaps`)
       ]);
       setShifts(shiftsRes.data || []);
       if (shiftsRes.data && shiftsRes.data.length > 0) {
@@ -221,7 +221,7 @@ export default function ShiftManagement() {
   const handleAssignRoster = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/shifts/roster/assign`, assignForm);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/shifts/roster/assign`, assignForm);
       setShowAssignModal(false);
       setAssignForm({
         employeeName: '',
@@ -250,7 +250,7 @@ export default function ShiftManagement() {
       const person = sampleNames[Math.floor(Math.random() * sampleNames.length)];
       const randomShift = shifts[Math.floor(Math.random() * shifts.length)] || shifts[0];
 
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/shifts/roster/assign`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/shifts/roster/assign`, {
         employeeName: person.name,
         employeeId: person.id,
         department: person.dept,
@@ -269,7 +269,7 @@ export default function ShiftManagement() {
   const handleCreateShift = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/shifts/types`, shiftForm);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/shifts/types`, shiftForm);
       setShowCreateShiftModal(false);
       setShiftForm({
         name: '',
@@ -295,7 +295,7 @@ export default function ShiftManagement() {
   const handleCreateSwap = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/shifts/swaps`, swapForm);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/shifts/swaps`, swapForm);
       setShowSwapModal(false);
       setSwapForm({
         requesterName: '',
@@ -315,7 +315,7 @@ export default function ShiftManagement() {
 
   const handleReviewSwap = async (id: string, newStatus: 'Approved' | 'Rejected') => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/shifts/swaps/${id}`, {
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/shifts/swaps/${id}`, {
         status: newStatus,
         reviewedBy: 'Shift Supervisor'
       });

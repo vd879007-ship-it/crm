@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   Pencil,
@@ -128,8 +128,8 @@ export default function CompanyPoliciesForms() {
   const fetchFormsAndSubmissions = async () => {
     try {
       const [formsRes, subRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/forms`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/forms/submissions`)
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hr/forms`),
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hr/forms/submissions`)
       ]);
       setForms(formsRes.data || []);
       setSubmissions(subRes.data || []);
@@ -166,7 +166,7 @@ export default function CompanyPoliciesForms() {
         dependentName: editingSubmission.dependentName,
         destination: editingSubmission.destination
       };
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/forms/submissions/${editingSubmission.id}`, {
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hr/forms/submissions/${editingSubmission.id}`, {
         employeeName: editingSubmission.employeeName,
         department: editingSubmission.department,
         status: editingSubmission.status,
@@ -184,7 +184,7 @@ export default function CompanyPoliciesForms() {
   const handleDeleteSubmission = async (id: string) => {
     if (!window.confirm('Delete this form submission record?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/forms/submissions/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hr/forms/submissions/${id}`);
       fetchFormsAndSubmissions();
     } catch (err) {
       console.error(err);
@@ -217,7 +217,7 @@ export default function CompanyPoliciesForms() {
         }
       };
 
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/forms/submissions`, payload);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/forms/submissions`, payload);
       setShowSubmitModal(false);
       setSubmitFormData({
         employeeName: '',
@@ -249,7 +249,7 @@ export default function CompanyPoliciesForms() {
           claimAmount: '1,50,000'
         }
       };
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/forms/submissions`, sample);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/forms/submissions`, sample);
       fetchFormsAndSubmissions();
       setActiveTab('submissions');
     } catch (err) {
@@ -259,7 +259,7 @@ export default function CompanyPoliciesForms() {
 
   const handleUpdateStatus = async (submissionId: string, newStatus: 'Approved' | 'Rejected') => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/forms/submissions/${submissionId}/status`, {
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hr/forms/submissions/${submissionId}/status`, {
         status: newStatus,
         reviewedBy: 'People Operations Lead'
       });

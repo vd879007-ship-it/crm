@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Plus, GripVertical, Trash2, Pencil } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -34,7 +34,7 @@ export default function Leads() {
     e.preventDefault();
     if (!editingLead) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/leads/${editingLead.id}`, editLeadForm);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/crm/leads/${editingLead.id}`, editLeadForm);
       setShowEditModal(false);
       fetchLeads();
     } catch (err) {
@@ -46,7 +46,7 @@ export default function Leads() {
 
   const fetchLeads = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/leads`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/crm/leads`);
       setLeads(res.data);
     } catch (err) {
       console.error(err);
@@ -60,7 +60,7 @@ export default function Leads() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/leads`, newLead);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/crm/leads`, newLead);
       setShowModal(false);
       setNewLead({ name: '', company: '', email: '', phone: '', source: 'Website', status: 'New' });
       fetchLeads();
@@ -72,7 +72,7 @@ export default function Leads() {
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this lead?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/leads/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/crm/leads/${id}`);
       fetchLeads();
     } catch (err) {
       console.error(err);
@@ -81,7 +81,7 @@ export default function Leads() {
 
   const updateLeadStatus = async (id: string, status: string) => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/leads/${id}/status`, { status });
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/crm/leads/${id}/status`, { status });
       fetchLeads();
     } catch (err) {
       console.error(err);

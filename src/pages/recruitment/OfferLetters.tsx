@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   Award, Plus, Search, Filter, CheckCircle2, Clock, Pencil, Trash2, 
@@ -55,7 +55,7 @@ export default function OfferLetters() {
     e.preventDefault();
     if (!editingOffer) return;
     try {
-      const res = await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/offers/${editingOffer.id}`, editOfferForm);
+      const res = await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/offers/${editingOffer.id}`, editOfferForm);
       setOffers(offers.map(o => o.id === editingOffer.id ? res.data : o));
       setShowEditModal(false);
     } catch (err) {
@@ -67,7 +67,7 @@ export default function OfferLetters() {
   const handleDeleteOffer = async (id: string) => {
     if (!confirm('Are you sure you want to delete this offer letter?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/offers/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/offers/${id}`);
       setOffers(offers.filter(o => o.id !== id));
       if (selectedOffer?.id === id) setSelectedOffer(null);
     } catch (err) {
@@ -93,7 +93,7 @@ export default function OfferLetters() {
 
   const fetchOffers = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/offers`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/offers`);
       setOffers(res.data);
     } catch (err) {
       console.error(err);
@@ -110,7 +110,7 @@ export default function OfferLetters() {
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/offers`, createForm);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/offers`, createForm);
       setOffers([res.data, ...offers]);
       setShowCreateModal(false);
       setSelectedOffer(res.data);
@@ -131,7 +131,7 @@ export default function OfferLetters() {
 
   const handleStatusChange = async (id: string, status: string) => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/recruitment/offers/${id}/status`, { status });
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/recruitment/offers/${id}/status`, { status });
       setOffers(offers.map(o => o.id === id ? { ...o, status, signedDate: status === 'Accepted' ? new Date().toISOString().split('T')[0] : o.signedDate } : o));
       if (selectedOffer?.id === id) {
         setSelectedOffer({ ...selectedOffer, status, signedDate: status === 'Accepted' ? new Date().toISOString().split('T')[0] : selectedOffer.signedDate });

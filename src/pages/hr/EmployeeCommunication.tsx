@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   Pencil,
@@ -66,7 +66,7 @@ export default function EmployeeCommunication() {
 
   const fetchCommunications = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/communications`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hr/communications`);
       setCommunications(res.data || []);
     } catch (err) {
       console.error('Failed to fetch communications:', err);
@@ -88,7 +88,7 @@ export default function EmployeeCommunication() {
     e.preventDefault();
     if (!editingComm) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/communications/${editingComm.id}`, editingComm);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hr/communications/${editingComm.id}`, editingComm);
       setShowEditModal(false);
       setEditingComm(null);
       fetchCommunications();
@@ -101,7 +101,7 @@ export default function EmployeeCommunication() {
   const handlePost = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/communications`, formData);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/communications`, formData);
       setShowModal(false);
       setFormData({
         title: '',
@@ -121,7 +121,7 @@ export default function EmployeeCommunication() {
   const handleDelete = async (id: string) => {
     if (!window.confirm('Archive this announcement?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/communications/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hr/communications/${id}`);
       fetchCommunications();
     } catch (err) {
       console.error(err);
@@ -160,7 +160,7 @@ export default function EmployeeCommunication() {
     ];
 
     for (const s of samples) {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/communications`, s);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/communications`, s);
     }
     fetchCommunications();
   };

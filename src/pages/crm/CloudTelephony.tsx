@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { 
   PhoneForwarded, 
@@ -96,13 +96,13 @@ export default function CloudTelephony() {
 
   const fetchCalls = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/call/logs`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/call/logs`);
       if (Array.isArray(res.data) && res.data.length > 0) {
         setCalls(res.data);
       }
     } catch (err) {
       try {
-        const fallback = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/telephony/calls`);
+        const fallback = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/crm/telephony/calls`);
         setCalls(Array.isArray(fallback.data) ? fallback.data : []);
       } catch (e) {
         console.error(e);
@@ -127,7 +127,7 @@ export default function CloudTelephony() {
 
     const initTwilioDevice = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/telephony/token`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/telephony/token`);
         if (res.data && res.data.token) {
           const device = new Device(res.data.token, {
             logLevel: 1
@@ -251,7 +251,7 @@ export default function CloudTelephony() {
       }
 
       // 2. Trigger Twilio Outbound Call Bridge
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/call`, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/call`, {
         phoneNumber: formattedCustomerNumber,
         agentNumber: formattedAgentNumber,
         contactName: callerName || 'Customer Prospect',
@@ -315,7 +315,7 @@ export default function CloudTelephony() {
     
     try {
       // 1. Send hangup command to Twilio to immediately cut the call on the mobile phone
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/call/end`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/call/end`, {
         providerCallId: activeProviderCallId,
         callId: activeCallId,
         durationSeconds: recordedDuration
@@ -332,7 +332,7 @@ export default function CloudTelephony() {
       }
 
       // 3. Also log the record in local DB / fallback
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/telephony/calls`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/crm/telephony/calls`, {
         contactName: callerName || 'Customer Prospect',
         phoneNumber: dialNumber || '+91 8870370740',
         direction: 'Outbound',
@@ -406,7 +406,7 @@ export default function CloudTelephony() {
       });
 
       // 2. Also save to backend
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/telephony/calls`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/crm/telephony/calls`, {
         ...callFormData,
         tags: callFormData.tags.split(',').map(t => t.trim()).filter(Boolean)
       });
@@ -423,7 +423,7 @@ export default function CloudTelephony() {
     e.preventDefault();
     if (!editingCall) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/telephony/calls/${editingCall.id}`, {
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/crm/telephony/calls/${editingCall.id}`, {
         ...callFormData,
         tags: callFormData.tags.split(',').map(t => t.trim()).filter(Boolean)
       });
@@ -439,7 +439,7 @@ export default function CloudTelephony() {
   const handleDeleteCall = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this telephony recording and call record?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/telephony/calls/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/crm/telephony/calls/${id}`);
       if (selectedCallForPlayback?.id === id) {
         setSelectedCallForPlayback(null);
         setIsPlayingAudio(false);
@@ -761,7 +761,7 @@ export default function CloudTelephony() {
                   src={
                     selectedCallForPlayback.recordingUrl.startsWith('http')
                       ? selectedCallForPlayback.recordingUrl
-                      : `${import.meta.env.VITE_API_URL || 'http://localhost:4000'}${selectedCallForPlayback.recordingUrl}`
+                      : `${import.meta.env.VITE_API_URL || ''}${selectedCallForPlayback.recordingUrl}`
                   }
                   onTimeUpdate={(e) => {
                     const curr = e.currentTarget.currentTime;
@@ -799,7 +799,7 @@ export default function CloudTelephony() {
                       href={
                         selectedCallForPlayback.recordingUrl.startsWith('http')
                           ? selectedCallForPlayback.recordingUrl
-                          : `${import.meta.env.VITE_API_URL || 'http://localhost:4000'}${selectedCallForPlayback.recordingUrl}`
+                          : `${import.meta.env.VITE_API_URL || ''}${selectedCallForPlayback.recordingUrl}`
                       }
                       target="_blank"
                       rel="noreferrer"

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { 
   Pencil,
@@ -149,9 +149,9 @@ export default function Attendance() {
   const fetchData = async () => {
     try {
       const [termRes, swipeRes, regRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/swipes/terminals`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/swipes/raw-logs`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/attendance/regularizations`)
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/swipes/terminals`),
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/swipes/raw-logs`),
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hem/attendance/regularizations`)
       ]);
       setTerminals(termRes.data || []);
       setSwipes(swipeRes.data || []);
@@ -176,7 +176,7 @@ export default function Attendance() {
     e.preventDefault();
     if (!editingTerminal) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/swipes/terminals/${editingTerminal.id}`, editingTerminal);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/swipes/terminals/${editingTerminal.id}`, editingTerminal);
       setShowEditTerminalModal(false);
       setEditingTerminal(null);
       fetchData();
@@ -189,7 +189,7 @@ export default function Attendance() {
   const handleDeleteTerminal = async (id: string) => {
     if (!window.confirm('Delete this terminal device hardware record?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/swipes/terminals/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hem/swipes/terminals/${id}`);
       fetchData();
     } catch (err) {
       console.error(err);
@@ -206,7 +206,7 @@ export default function Attendance() {
     e.preventDefault();
     if (!editingRegularization) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/attendance/regularizations/${editingRegularization.id}`, editingRegularization);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/attendance/regularizations/${editingRegularization.id}`, editingRegularization);
       setShowEditRegularizationModal(false);
       setEditingRegularization(null);
       fetchData();
@@ -219,7 +219,7 @@ export default function Attendance() {
   const handleDeleteRegularization = async (id: string) => {
     if (!window.confirm('Delete this missed punch regularization request?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/attendance/regularizations/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hem/attendance/regularizations/${id}`);
       fetchData();
     } catch (err) {
       console.error(err);
@@ -317,7 +317,7 @@ export default function Attendance() {
     const message = `*ATTENDANCE PUNCH CONFIRMED: ${log.direction.toUpperCase()}*\n\nDear ${log.employeeName} (${log.employeeId}),\nYour attendance punch has been registered successfully.\n\n*Punch Details:*\nDirection: ${log.direction}\nTime: ${timeFormatted} | Date: ${dateFormatted}\nIngestion Mode: ${log.sourceType}\nTerminal: ${log.terminalId} (${log.location})\nVerification Score: ${log.confidence}% Match (Biometric + Facial)\nStatus: ${log.verificationStatus}\nPunctuality: ${log.isLate ? 'Late Arrival' : 'On Time'}\n\nAthena Enterprise HR Systems • OmniCloud HQ.`;
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/erp/whatsapp/send`, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/erp/whatsapp/send`, {
         phone: cleanPhone,
         message,
         customerName: log.employeeName
@@ -352,7 +352,7 @@ export default function Attendance() {
         photoSnapshotUrl: selfieSnapshot || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80'
       };
 
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/swipes/raw-logs`, payload);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/swipes/raw-logs`, payload);
       handleCloseSelfieKiosk();
       fetchData();
 
@@ -369,7 +369,7 @@ export default function Attendance() {
 
   const handleSyncTerminal = async (id: string) => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/swipes/terminals/${id}/sync`);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/swipes/terminals/${id}/sync`);
       fetchData();
       alert('Terminal synchronized successfully.');
     } catch (err) {
@@ -389,7 +389,7 @@ export default function Attendance() {
       const src = terminal?.sourceType || 'Biometric Fingerprint (ZKTeco)';
       const tId = terminal?.id || 'DEV-BIO-01';
 
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/swipes/raw-logs`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/swipes/raw-logs`, {
         employeeName: person.name,
         employeeId: person.id,
         department: person.dept,
@@ -408,7 +408,7 @@ export default function Attendance() {
   const handleSubmitPunch = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/swipes/raw-logs`, punchForm);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/swipes/raw-logs`, punchForm);
       setShowManualPunchModal(false);
       fetchData();
     } catch (err) {
@@ -420,7 +420,7 @@ export default function Attendance() {
   const handleCreateTerminal = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/swipes/terminals`, terminalForm);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/swipes/terminals`, terminalForm);
       setShowAddTerminalModal(false);
       setTerminalForm({
         name: '',
@@ -438,7 +438,7 @@ export default function Attendance() {
   const handleSubmitRegularization = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/attendance/regularize`, regularizeForm);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hem/attendance/regularize`, regularizeForm);
       setShowRegularizeModal(false);
       setRegularizeForm({
         employeeName: '',
@@ -458,7 +458,7 @@ export default function Attendance() {
 
   const handleReviewRegularization = async (id: string, status: 'Approved' | 'Rejected') => {
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hem/attendance/regularizations/${id}`, {
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hem/attendance/regularizations/${id}`, {
         status,
         reviewedBy: 'HR Attendance Lead'
       });

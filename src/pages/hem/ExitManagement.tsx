@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   Pencil,
@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import HEMNavigation from '../../components/HEMNavigation';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 export default function ExitManagement() {
   const [activeTab, setActiveTab] = useState<'resignations' | 'clearance' | 'interviews' | 'fnf'>('resignations');

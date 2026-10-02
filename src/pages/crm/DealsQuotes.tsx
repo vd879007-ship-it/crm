@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { 
@@ -88,8 +88,8 @@ export default function DealsQuotes() {
   const fetchData = async () => {
     try {
       const [dealsRes, quotesRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/deals`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/quotes`)
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/crm/deals`),
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/crm/quotes`)
       ]);
       setDeals(Array.isArray(dealsRes.data) ? dealsRes.data : []);
       setQuotes(Array.isArray(quotesRes.data) ? quotesRes.data : []);
@@ -143,7 +143,7 @@ export default function DealsQuotes() {
   const handleCreateDealSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/deals`, dealForm);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/crm/deals`, dealForm);
       setShowDealCreateModal(false);
       fetchData();
     } catch (err) {
@@ -156,7 +156,7 @@ export default function DealsQuotes() {
     e.preventDefault();
     if (!editingDeal) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/deals/${editingDeal.id}`, dealForm);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/crm/deals/${editingDeal.id}`, dealForm);
       setShowDealEditModal(false);
       setEditingDeal(null);
       fetchData();
@@ -169,7 +169,7 @@ export default function DealsQuotes() {
   const handleDeleteDeal = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this deal opportunity?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/deals/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/crm/deals/${id}`);
       fetchData();
     } catch (err) {
       console.error(err);
@@ -182,10 +182,10 @@ export default function DealsQuotes() {
     try {
       setConvertingToInvoice(true);
       // Mark deal as Won in CRM
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/deals/${deal.id}/convert-to-invoice`);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/crm/deals/${deal.id}/convert-to-invoice`);
       
       // Post to ERP Invoicing Engine
-      const invRes = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/erp/invoices`, {
+      const invRes = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/erp/invoices`, {
         customerName: deal.company || deal.contactPerson || 'Enterprise Client',
         customerEmail: deal.contactEmail || 'billing@client.com',
         customerPhone: deal.contactPhone || '',
@@ -224,7 +224,7 @@ export default function DealsQuotes() {
         ? quote.items.reduce((s: number, i: any) => s + (Number(i.quantity || 1) * Number(i.unitPrice || 0)), 0)
         : Number(quote.totalAmount || 0);
 
-      const invRes = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/erp/invoices`, {
+      const invRes = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/erp/invoices`, {
         customerName: quote.customerName || quote.customerCompany || 'Enterprise Client',
         customerEmail: quote.customerEmail || 'billing@client.com',
         items: (quote.items || []).map((item: any) => ({
@@ -239,7 +239,7 @@ export default function DealsQuotes() {
       });
 
       // Update quote status to Approved
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/quotes/${quote.id}`, {
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/crm/quotes/${quote.id}`, {
         status: 'Approved'
       });
 
@@ -341,7 +341,7 @@ export default function DealsQuotes() {
     e.preventDefault();
     const totals = calculateQuoteTotals();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/quotes`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/crm/quotes`, {
         ...quoteForm,
         subtotal: totals.subtotal,
         discountAmount: totals.discountAmount,
@@ -361,7 +361,7 @@ export default function DealsQuotes() {
     if (!selectedQuote) return;
     const totals = calculateQuoteTotals();
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/quotes/${selectedQuote.id}`, {
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/crm/quotes/${selectedQuote.id}`, {
         ...quoteForm,
         subtotal: totals.subtotal,
         discountAmount: totals.discountAmount,
@@ -380,7 +380,7 @@ export default function DealsQuotes() {
   const handleDeleteQuote = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this quotation?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/crm/quotes/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/crm/quotes/${id}`);
       fetchData();
     } catch (err) {
       console.error(err);

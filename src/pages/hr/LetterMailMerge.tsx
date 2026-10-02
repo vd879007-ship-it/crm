@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
   Mail, 
@@ -105,8 +105,8 @@ export default function LetterMailMerge() {
   const fetchTemplatesAndHistory = async () => {
     try {
       const [tplRes, histRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/letters/templates`),
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/letters/history`)
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hr/letters/templates`),
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/hr/letters/history`)
       ]);
       setTemplates(tplRes.data || []);
       if (tplRes.data && tplRes.data.length > 0) {
@@ -128,7 +128,7 @@ export default function LetterMailMerge() {
     e.preventDefault();
     try {
       const vars = createTemplateForm.variables.split(',').map(v => v.trim()).filter(Boolean);
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/letters/templates`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/letters/templates`, {
         name: createTemplateForm.name,
         type: createTemplateForm.type,
         body: createTemplateForm.body,
@@ -164,7 +164,7 @@ export default function LetterMailMerge() {
     if (!editingTemplate) return;
     try {
       const vars = editTemplateForm.variables.split(',').map(v => v.trim()).filter(Boolean);
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/letters/templates/${editingTemplate.id}`, {
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hr/letters/templates/${editingTemplate.id}`, {
         name: editTemplateForm.name,
         type: editTemplateForm.type,
         body: editTemplateForm.body,
@@ -182,7 +182,7 @@ export default function LetterMailMerge() {
   const handleDeleteTemplate = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this letter template?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/letters/templates/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hr/letters/templates/${id}`);
       fetchTemplatesAndHistory();
     } catch (err) {
       console.error(err);
@@ -207,7 +207,7 @@ export default function LetterMailMerge() {
     e.preventDefault();
     if (!editingLetter) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/letters/history/${editingLetter.id}`, editLetterForm);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/hr/letters/history/${editingLetter.id}`, editLetterForm);
       setShowEditLetterModal(false);
       setEditingLetter(null);
       fetchTemplatesAndHistory();
@@ -220,7 +220,7 @@ export default function LetterMailMerge() {
   const handleDeleteLetter = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this letter from history?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/letters/history/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/hr/letters/history/${id}`);
       fetchTemplatesAndHistory();
     } catch (err) {
       console.error(err);
@@ -253,7 +253,7 @@ export default function LetterMailMerge() {
         }
       };
 
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/letters/generate`, payload);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/letters/generate`, payload);
       setShowGenerateModal(false);
       setFormData({
         employeeName: '',
@@ -291,7 +291,7 @@ export default function LetterMailMerge() {
           '{{work_location}}': 'Bangalore HQ'
         }
       };
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/hr/letters/generate`, payload);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/hr/letters/generate`, payload);
       fetchTemplatesAndHistory();
     } catch (err) {
       console.error('Simulation failed:', err);

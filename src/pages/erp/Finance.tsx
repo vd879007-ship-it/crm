@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+﻿import { useState, useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { 
@@ -267,7 +267,7 @@ export default function Finance() {
 
   const [newTx, setNewTx] = useState({ type: 'Income', amount: 0, category: 'Sales', description: '' });
 
-  const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+  const API_BASE = import.meta.env.VITE_API_URL || '';
 
   const exportPnLCSV = () => {
     if (!pnl) return;

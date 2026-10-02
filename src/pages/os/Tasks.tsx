@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { CheckCircle2, Clock, Calendar, Plus, Pencil, Trash2 } from 'lucide-react';
 import OSNavigation from '../../components/OSNavigation';
@@ -26,7 +26,7 @@ export default function Tasks() {
     e.preventDefault();
     if (!editingTask) return;
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/os/tasks/${editingTask.id}`, editTaskForm);
+      await axios.put(`${import.meta.env.VITE_API_URL || ''}/api/os/tasks/${editingTask.id}`, editTaskForm);
       setShowEditModal(false);
       fetchTasks();
     } catch (err) {
@@ -37,7 +37,7 @@ export default function Tasks() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this task?')) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/os/tasks/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/os/tasks/${id}`);
       fetchTasks();
     } catch (err) {
       alert('Failed to delete task');
@@ -50,7 +50,7 @@ export default function Tasks() {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/os/tasks`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/os/tasks`);
       setTasks(res.data);
     } catch (err) {
       console.error(err);
@@ -64,7 +64,7 @@ export default function Tasks() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/os/tasks`, { ...newTask, userId: currentUser?.id });
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/os/tasks`, { ...newTask, userId: currentUser?.id });
       setShowModal(false);
       setNewTask({ title: '', description: '', status: 'Pending', dueDate: '' });
       fetchTasks();

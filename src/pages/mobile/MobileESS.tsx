@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   Smartphone, MapPin, Camera, Clock, DollarSign, Calendar,
@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 export default function MobileESS() {
   const [activeTab, setActiveTab] = useState<'home' | 'punch' | 'leaves' | 'payslip' | 'expenses' | 'approvals'>('home');

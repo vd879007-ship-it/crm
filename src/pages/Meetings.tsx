@@ -22,7 +22,7 @@ export default function Meetings() {
   const localStreamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
-    const newSocket = io(import.meta.env.VITE_API_URL || 'http://localhost:4000');
+    const newSocket = io(import.meta.env.VITE_API_URL || undefined);
     setSocket(newSocket);
 
     newSocket.on('webrtc_offer', async (data) => {

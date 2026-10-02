@@ -714,3 +714,7 @@ httpServer.listen(PORT, HOST, () => {
   console.log(`Server running on http://${HOST}:${PORT}`);
 });
 
+export { app, httpServer };
+export default app;
+
+

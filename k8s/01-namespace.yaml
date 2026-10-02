@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: athena-enterprise
+  labels:
+    environment: production
+    app.kubernetes.io/name: athena-teams
+    security.enterprise.io/enforce: "true"

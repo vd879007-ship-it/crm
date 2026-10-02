@@ -1,0 +1,399 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id           String         @id @default(uuid())
+  username     String?        @unique
+  email        String         @unique
+  password     String
+  name         String
+  role         String         @default("Employee")
+  department   String
+  status       String         @default("APPROVED") // PENDING, APPROVED, REJECTED
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  leaves       LeaveRequest[]
+  attendance   Attendance[]
+  messages     Message[]
+  channels     ChannelUser[]
+  // CRM Relations
+  assignedLeads     Lead[]
+  assignedCustomers Customer[]
+  salesDocuments    SalesDocument[]
+  supportTickets    SupportTicket[]
+  communications    CommunicationLog[]
+  // HEM Relations
+  employeeDetail    EmployeeDetail?
+  hemShifts         HemShift[]
+  attendanceLogs    AttendanceLog[]
+  leaveBalances     LeaveBalance[]
+  payrollRecords    PayrollRecord[]
+  performanceReview PerformanceReview[]
+  // OS Relations
+  tasks             Task[]
+  serviceTickets    ServiceTicket[]
+  financeRecords    FinanceTransaction[]
+  // ERP Relations
+  projects          Project[]
+  assets            Asset[]
+  auditLogs         AuditLog[]
+}
+
+model LeaveRequest {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  startDate   DateTime
+  endDate     DateTime
+  reason      String
+  status      String   @default("Pending") // Pending, Approved, Rejected
+  createdAt   DateTime @default(now())
+}
+
+model Attendance {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  date        DateTime @default(now())
+  checkIn     DateTime
+  checkOut    DateTime?
+}
+
+model Channel {
+  id          String        @id @default(uuid())
+  name        String
+  isGroup     Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  users       ChannelUser[]
+  messages    Message[]
+}
+
+model ChannelUser {
+  id        String   @id @default(uuid())
+  userId    String
+  channelId String
+  user      User     @relation(fields: [userId], references: [id])
+  channel   Channel  @relation(fields: [channelId], references: [id])
+  @@unique([userId, channelId])
+}
+
+model Message {
+  id          String   @id @default(uuid())
+  content     String
+  userId      String
+  channelId   String
+  user        User     @relation(fields: [userId], references: [id])
+  channel     Channel  @relation(fields: [channelId], references: [id])
+  fileUrl     String?  // For attachments
+  createdAt   DateTime @default(now())
+}
+
+// ==========================================
+// CRM MODULE MODELS
+// ==========================================
+
+model Lead {
+  id          String   @id @default(uuid())
+  name        String
+  company     String?
+  email       String?
+  phone       String?
+  source      String?  // Website, WhatsApp, Instagram, Facebook, Call, Form
+  status      String   @default("New") // New, Contacted, Qualified, Proposal, Negotiation, Won, Lost
+  score       Int      @default(0)
+  assignedToId String?
+  assignedTo  User?    @relation(fields: [assignedToId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  communications CommunicationLog[]
+}
+
+model Customer {
+  id             String   @id @default(uuid())
+  name           String
+  company        String?
+  email          String?
+  phone          String?
+  address        String?
+  creditInfo     String?
+  assignedToId   String?
+  assignedTo     User?    @relation(fields: [assignedToId], references: [id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  contacts       ContactPerson[]
+  salesDocuments SalesDocument[]
+  supportTickets SupportTicket[]
+  communications CommunicationLog[]
+  tasks          Task[]
+}
+
+model ContactPerson {
+  id          String   @id @default(uuid())
+  customerId  String
+  customer    Customer @relation(fields: [customerId], references: [id])
+  name        String
+  email       String?
+  phone       String?
+  position    String?
+  createdAt   DateTime @default(now())
+}
+
+model SalesDocument {
+  id          String   @id @default(uuid())
+  type        String   // Quotation, Estimate, SalesOrder, Invoice
+  customerId  String
+  customer    Customer @relation(fields: [customerId], references: [id])
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  totalAmount Float
+  discount    Float    @default(0)
+  status      String   @default("Draft") // Draft, Sent, Accepted, Rejected, Paid
+  items       String   // JSON string of items or simplified text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  payments    Payment[]
+}
+
+model Payment {
+  id              String   @id @default(uuid())
+  salesDocumentId String
+  salesDocument   SalesDocument @relation(fields: [salesDocumentId], references: [id])
+  amount          Float
+  paymentDate     DateTime @default(now())
+  method          String?  // Cash, Credit Card, Transfer
+}
+
+model SupportTicket {
+  id          String   @id @default(uuid())
+  customerId  String
+  customer    Customer @relation(fields: [customerId], references: [id])
+  assignedToId String?
+  assignedTo  User?    @relation(fields: [assignedToId], references: [id])
+  subject     String
+  description String
+  status      String   @default("Open") // Open, In Progress, Resolved, Closed
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model CommunicationLog {
+  id          String   @id @default(uuid())
+  type        String   // WhatsApp, Email, SMS, Call
+  direction   String   // Inbound, Outbound
+  content     String
+  leadId      String?
+  lead        Lead?    @relation(fields: [leadId], references: [id])
+  customerId  String?
+  customer    Customer? @relation(fields: [customerId], references: [id])
+  createdById String?
+  createdBy   User?    @relation(fields: [createdById], references: [id])
+  timestamp   DateTime @default(now())
+}
+
+// ==========================================
+// HEM MODULE MODELS
+// ==========================================
+
+model EmployeeDetail {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id])
+  joiningDate      DateTime?
+  baseSalary       Float    @default(0)
+  emergencyContact String?
+  skills           String?  // JSON or comma-separated
+  certifications   String?
+  employmentHistory String? // JSON or text
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model HemShift {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  shiftName   String
+  startTime   String   // e.g., "09:00"
+  endTime     String   // e.g., "17:00"
+  date        DateTime @default(now())
+}
+
+model AttendanceLog {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  type        String   // Check-in, Check-out, Break-start, Break-end
+  timestamp   DateTime @default(now())
+  gpsLocation String?  // Latitude,Longitude
+  biometricId String?  // Face/Fingerprint ID hash
+  isLate      Boolean  @default(false)
+}
+
+model LeaveBalance {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  leaveType   String   // Paid, Unpaid, Sick, Casual
+  totalDays   Int      @default(20)
+  usedDays    Int      @default(0)
+}
+
+model PayrollRecord {
+  id             String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  month          String   // e.g., "September 2026"
+  baseSalary     Float
+  allowances     Float    @default(0)
+  incentives     Float    @default(0)
+  overtimePay    Float    @default(0)
+  deductions     Float    @default(0)
+  loansAdvances  Float    @default(0)
+  netSalary      Float
+  status         String   @default("Pending") // Pending, Paid
+  createdAt      DateTime @default(now())
+}
+
+model PerformanceReview {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  period      String   // e.g., "Q3 2026"
+  kpiScore    Float    @default(0)
+  targetsMet  Int      @default(0)
+  feedback    String?
+  promoted    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+// ==========================================
+// BUSINESS OS (ERP) MODULE MODELS
+// ==========================================
+
+model Task {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  status      String   @default("Pending") // Pending, In Progress, Completed, Delayed
+  dueDate     DateTime?
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  customerId  String?
+  customer    Customer? @relation(fields: [customerId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model JobOpening {
+  id          String   @id @default(uuid())
+  title       String
+  department  String
+  status      String   @default("Open") // Open, Closed
+  description String
+  applications JobApplication[]
+  createdAt   DateTime @default(now())
+}
+
+model JobApplication {
+  id          String   @id @default(uuid())
+  jobId       String
+  job         JobOpening @relation(fields: [jobId], references: [id])
+  name        String
+  email       String
+  phone       String?
+  resumeUrl   String?
+  status      String   @default("Applied") // Applied, Screening, Interview, Offered, Rejected
+  createdAt   DateTime @default(now())
+}
+
+model ServiceTicket {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  priority    String   @default("Medium") // Low, Medium, High, Critical
+  status      String   @default("Open") // Open, Assigned, Resolved, Closed
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model FinanceTransaction {
+  id          String   @id @default(uuid())
+  type        String   // Income, Expense, Receivable, Payable
+  amount      Float
+  category    String
+  description String?
+  status      String   @default("Completed") // Pending, Completed
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  date        DateTime @default(now())
+}
+
+// ==========================================
+// CORE ERP MODULE MODELS
+// ==========================================
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  sku         String   @unique
+  category    String
+  price       Float
+  stock       Int      @default(0)
+  reorderLevel Int     @default(10)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Supplier {
+  id          String   @id @default(uuid())
+  name        String
+  contactName String?
+  email       String?
+  phone       String?
+  address     String?
+  createdAt   DateTime @default(now())
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  status      String   @default("Planning") // Planning, Active, Completed, On Hold
+  startDate   DateTime?
+  endDate     DateTime?
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Asset {
+  id          String   @id @default(uuid())
+  name        String
+  category    String   // Electronics, Furniture, Vehicle
+  serialNo    String?  @unique
+  status      String   @default("Available") // Available, Assigned, Maintenance
+  assignedToId String?
+  assignedTo  User?    @relation(fields: [assignedToId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  action      String
+  entity      String
+  entityId    String?
+  details     String?
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+}

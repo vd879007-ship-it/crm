@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Athena Teams</string>
+    <string name="title_activity_main">Athena Teams</string>
+    <string name="package_name">com.skillstar.crm</string>
+    <string name="custom_url_scheme">com.skillstar.crm</string>
+</resources>

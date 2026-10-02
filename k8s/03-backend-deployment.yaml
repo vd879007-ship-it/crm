@@ -1,0 +1,127 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: athena-backend
+  namespace: athena-enterprise
+  labels:
+    app.kubernetes.io/name: athena-backend
+    app.kubernetes.io/part-of: athena-teams
+spec:
+  replicas: 3
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: athena-backend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: athena-backend
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: backend
+          image: ghcr.io/enterprise/athena-backend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 4000
+              name: http
+          envFrom:
+            - configMapRef:
+                name: athena-config
+            - secretRef:
+                name: athena-secrets
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1536Mi"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 2
+          volumeMounts:
+            - name: persistent-storage
+              mountPath: /app/prisma
+            - name: uploads-storage
+              mountPath: /app/uploads
+      volumes:
+        - name: persistent-storage
+          persistentVolumeClaim:
+            claimName: athena-db-pvc
+        - name: uploads-storage
+          persistentVolumeClaim:
+            claimName: athena-uploads-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: athena-backend-service
+  namespace: athena-enterprise
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: athena-backend
+  ports:
+    - port: 4000
+      targetPort: http
+      name: http
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: athena-backend-hpa
+  namespace: athena-enterprise
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: athena-backend
+  minReplicas: 3
+  maxReplicas: 12
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 75
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: athena-backend-pdb
+  namespace: athena-enterprise
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: athena-backend

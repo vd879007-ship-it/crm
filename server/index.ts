@@ -718,6 +718,8 @@ app.use((req, res, next) => {
   res.sendFile(indexPath, (err) => {
     if (err) next();
   });
+});
+
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('Unhandled API Error:', err);
   if (res.headersSent) {

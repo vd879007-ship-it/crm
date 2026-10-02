@@ -696,7 +696,13 @@ io.on('connection', (socket) => {
 
 // Serve frontend build in production
 const distPath = path.join(__dirname, '../dist');
-app.use(express.static(distPath));
+app.use(express.static(distPath, {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html') || filePath.endsWith('sw.js') || filePath.endsWith('registerSW.js')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    }
+  }
+}));
 app.use((req, res, next) => {
   if (req.method !== 'GET') {
     return next();
@@ -705,6 +711,7 @@ app.use((req, res, next) => {
     return next();
   }
   const indexPath = path.join(distPath, 'index.html');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.sendFile(indexPath, (err) => {
     if (err) next();
   });

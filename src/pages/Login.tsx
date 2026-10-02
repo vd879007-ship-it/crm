@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 export default function Login() {
@@ -10,25 +10,34 @@ export default function Login() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    const cleanUsername = username.trim();
+    const cleanPassword = password.trim();
+
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username: cleanUsername, password: cleanPassword })
       });
       
-      const data = await res.json();
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch {
+        data = { error: `Server response error (HTTP ${res.status})` };
+      }
       
       if (!res.ok) {
-        setError(data.error || 'Login failed');
+        setError(data.error || `Login failed (HTTP ${res.status})`);
         return;
       }
 
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       navigate('/');
-    } catch (err) {
-      setError('Network error or server is down');
+    } catch (err: any) {
+      console.error('Login network error:', err);
+      setError(err?.message || 'Network error or server is down');
     }
   };
 

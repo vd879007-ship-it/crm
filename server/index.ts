@@ -53,6 +53,11 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+app.set('trust proxy', 1);
+app.use(cors());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
 // Enterprise Security Headers (Helmet-grade CSP, HSTS, X-Frame-Options)
 app.use(enterpriseSecurityHeaders);
 
@@ -65,8 +70,6 @@ app.use(apiRateLimiter);
 // Authenticate token extractor
 app.use(authenticateToken);
 
-app.use(cors());
-app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // ==========================================
@@ -715,6 +718,12 @@ app.use((req, res, next) => {
   res.sendFile(indexPath, (err) => {
     if (err) next();
   });
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error('Unhandled API Error:', err);
+  if (res.headersSent) {
+    return next(err);
+  }
+  res.status(err.status || 500).json({ error: err.message || 'Internal Server Error' });
 });
 
 async function bootstrapAdmin() {

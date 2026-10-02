@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 export default function Register() {
@@ -25,17 +25,23 @@ export default function Register() {
         body: JSON.stringify(formData)
       });
       
-      const data = await res.json();
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch {
+        data = { error: `Server error (HTTP ${res.status})` };
+      }
       
       if (!res.ok) {
-        setError(data.error || 'Registration failed');
+        setError(data.error || `Registration failed (HTTP ${res.status})`);
         return;
       }
 
       setSuccess(true);
       setTimeout(() => navigate('/login'), 3000);
-    } catch (err) {
-      setError('Network error or server is down');
+    } catch (err: any) {
+      console.error('Registration network error:', err);
+      setError(err?.message || 'Network error or server is down');
     }
   };
 
